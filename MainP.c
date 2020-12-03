@@ -19,6 +19,12 @@ typedef struct{
 } t_Board;
 
 typedef struct{
+  t_color Track_color[3];     /* Track_color[0] indicates if the track is double or not */
+  short occupied;             /* Indicates if the track has already been claimed by a player, 0 if not 1 if enemy 2 if our bot*/
+  short length;               /* NULL if the track doesnt exist */
+} t_Tracksncities;
+
+typedef struct{
   int available_wagons;       /* How many available wagons the player has */
   int Nb_cards_in_hand;       /* How many cards the player have in his hand */
   int Nb_objectives;          /* The number of objectives the player has */
@@ -209,4 +215,66 @@ t_return_code User_s_turn(t_Game* Game, int* game_over){
   }
   Game->which_player = 1;
   return end;
+}
+
+t_Tracksncities Create_cities_array(int* tracks,t_Game game){
+  t_Tracksncities ** T = (t_Tracksncities**) malloc(game.Board.Nb_Cities*sizeof(t_Tracksncities));
+  int ** temp = (int**) malloc(game.Board.Nb_Cities*sizeof(int));
+  char counter = 0;
+  int First_city, Scnd_city;
+  t_color first_color;
+
+  for(int i = 0; i<game.Board.Nb_Cities; i++){
+    temp[i]=malloc(15*sizeof(int)); /* We suppose that not more than 15 cities can be linked to a single one */
+  }
+  for(int i = 0; i<game.Board.Nb_Cities; i++){
+    T[i]=malloc(game.Board.Nb_Cities*sizeof(t_Tracksncities));
+  }
+
+  for(int i=0;i<game.Board.Nb_Tracks*5;i++){
+    switch(counter){
+      case 0:
+        First_city = tracks[i];
+        counter++;
+        break;
+      case 1:
+        Scnd_city = tracks[i];
+        counter++;
+        break;
+      case 2:
+        T[First_city][Scnd_city].length = tracks[i];
+        T[Scnd_city][First_city].length = tracks[i];
+        counter++;
+        break;
+      case 3:
+        first_color = tracks[i];
+        counter++;
+        break;
+      case 4:
+        if(tracks[i] == NONE){
+          T[First_city][Scnd_city].Track_color[0] = 0;
+          T[Scnd_city][First_city].Track_color[0] = 0;
+          T[First_city][Scnd_city].Track_color[1] = first_color;
+          T[Scnd_city][First_city].Track_color[1] = first_color;
+        }else{
+          T[First_city][Scnd_city].Track_color[0] = 1;
+          T[Scnd_city][First_city].Track_color[0] = 1;
+          T[First_city][Scnd_city].Track_color[1] = first_color;
+          T[Scnd_city][First_city].Track_color[1] = first_color;
+          T[First_city][Scnd_city].Track_color[2] = tracks[i];
+          T[Scnd_city][First_city].Track_color[2] = tracks[i];
+        }
+        counter = 0;
+        temp[First_city][Scnd_city]=1;
+        temp[Scnd_city][First_city]=1;
+        break;
+      default:
+        printf("Error while filling Track array\n");
+        exit(EXIT_FAILURE);
+    }
+  }
+  for(int i = 0; i<game.Board.Nb_Cities; i++){
+    free(temp[i]);
+  }
+  free(temp);
 }
