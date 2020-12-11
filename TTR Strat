@@ -1,0 +1,5 @@
+Stratégie Ticket to ride:
+
+Prendre les petites routes stratégiques en premier en fonction de nos cartes obj, 
+Si on a des objs vers l'est il faut prendre Nashville Atlanta, St Louis Nashville, Toronto Pittsburgh
+Faire des détours n'est pas forcément une mauvaise idée, ça cache la destination

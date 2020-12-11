@@ -19,7 +19,7 @@ t_Game start_game(){
   char* gameName = (char*) malloc(15*sizeof(char));
   strcpy(gameName, "Partie PL");
 
-  waitForT2RGame("TRAINING PLAY_RANDOM timeout=100 start=0 map=USA", gameName, &Game.Board.Nb_Cities, &Game.Board.Nb_Tracks);
+  waitForT2RGame("TRAINING NICE_BOT timeout=100 start=0 map=USA", gameName, &Game.Board.Nb_Cities, &Game.Board.Nb_Tracks);
   Game.Board.Tracks = (int*) malloc(5*Game.Board.Nb_Tracks*sizeof(int));
   Game.which_player = getMap(Game.Board.Tracks, Game.faceup, cards);
   Game.Player_nb = Game.which_player;
@@ -39,7 +39,11 @@ t_Game start_game(){
       we want to increment each value corresponding to the card color we got.
     */
   }
-
+  for (int i=0; i<20; i++){
+    Game.players[Game.Player_nb].objectives[i].city1 = 0;
+    Game.players[Game.Player_nb].objectives[i].city2 = 0;
+    Game.players[Game.Player_nb].objectives[i].score = 0;
+  }
   free(gameName);
   return Game;
 }

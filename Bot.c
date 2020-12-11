@@ -20,7 +20,7 @@ t_return_code User_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T){
   int city1, city2, color, nbLoco;
   t_color card;
   t_objective obj[3];
-  int object[3] = {1,1,1};
+  int object1[3] = {1,1,1}, object2[3] = {0,1,1};
 
   printf("It's your turn to play! Pick a move: ");
   scanf("%d",&move);
@@ -30,8 +30,8 @@ t_return_code User_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T){
       scanf("%d %d %d %d",&city1, &city2, &color, &nbLoco);
       printf("%d %d %d %d",city1, city2, color, nbLoco);
       end = claimRoute(city1,city2,color,nbLoco);
-      Game->players[Game->Player_nb].available_wagons -= nbLoco;
-      Game->players[Game->Player_nb].cards_in_hand[color] -= nbLoco;
+      Game->players[Game->Player_nb].available_wagons -= T[city1][city2].length;
+      Game->players[Game->Player_nb].cards_in_hand[color] -= T[city1][city2].length;
       if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
         *game_over = 1;
         return end;
@@ -41,21 +41,35 @@ t_return_code User_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T){
       printf("drawObjectives\n");
       end = drawObjectives(obj);
       /* We choose to keep every objectives yet */
-      if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
-        *game_over = 1;
-        return end;
+      if(Game->players[Game->Player_nb].Nb_objectives == 0){
+        /* If its the first drawObjectives we can take 3 */
+        end = chooseObjectives(object1);
+        for(int i = 0; i<3; i++){
+          Game->players[Game->Player_nb].objectives[i] = obj[i];
+          //printf("%d %d %d\n",obj[i].city1, obj[i].city2, obj[i].score);
+        }
+        Game->players[Game->Player_nb].Nb_objectives = 3;
+      }else{
+        /* If its not the first we can only take 2 of them */
+        end = chooseObjectives(object2);
+        for(int i = Game->players[Game->Player_nb].Nb_objectives ; i<Game->players[Game->Player_nb].Nb_objectives+3 ; i++ ){
+          Game->players[Game->Player_nb].objectives[i] = obj[i-Game->players[Game->Player_nb].Nb_objectives+1];
+        }
+        Game->players[Game->Player_nb].Nb_objectives += 2;
       }
-      end = chooseObjectives(object);
-      if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
-        *game_over = 1;
-        return end;
-      }
-      for(int i=0; i<3; i++){
-        Game->players[Game->Player_nb].objectives[i] = obj[i];
-        printf("%dth obj = %d %d %d ",i,obj[i].city1, obj[i].city2, obj[i].score);
-      }
-      Game->players[Game->Player_nb].Nb_objectives = 3;
 
+      for(int i = 0;i<Game->players[Game->Player_nb].Nb_objectives; i++){
+        printf("%dth obj = %d %d %d \n",i,Game->players[Game->Player_nb].objectives[i].city1, Game->players[Game->Player_nb].objectives[i].city2, Game->players[Game->Player_nb].objectives[i].score);
+      }
+      if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
+        *game_over = 1;
+        return end;
+      }
+
+      if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
+        *game_over = 1;
+        return end;
+      }
       break;
     case 3:
       printf("drawBlindCard\n");

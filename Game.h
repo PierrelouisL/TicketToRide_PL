@@ -1,7 +1,7 @@
 #ifndef __GAME_H__
 #define __GAME_H__
 
-#include "API/TicketToRideAPI.h" 
+#include "API/TicketToRideAPI.h"
 
 typedef struct{
   int Nb_Cities;              /* How many cities there is on the map */
@@ -11,7 +11,7 @@ typedef struct{
 
 typedef struct{
   t_color Track_color[3];     /* Track_color[0] indicates if the track is double or not */
-  short occupied;             /* Indicates if the track has already been claimed by a player, 0 if not 1 if enemy 2 if our bot*/
+  short occupied;             /* Indicates if the track has already been claimed by a player, 0 if not, 1 if enemy, 2 if our bot*/
   short length;               /* 0 if the track doesnt exist */
 } t_Tracksncities;
 

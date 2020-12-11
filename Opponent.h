@@ -5,6 +5,9 @@
 #include "Game.h"
 
 
-t_return_code Opponent_s_turn(t_Game* Game, int* game_over);
+t_return_code Opponent_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T);
+
+void Opponent_s_move(t_Game* Game, t_move opponent_move, t_Tracksncities** T);
+
 
 #endif
