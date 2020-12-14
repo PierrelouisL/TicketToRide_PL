@@ -15,7 +15,14 @@ int main(void){
   int game_over=0;
   t_return_code end;
   t_Tracksncities** T = Create_cities_array(Game);
-  int** D = create_D_array(T, Game);
+  int** G = create_G_array(T, Game);
+  int* pred = Dijkstra(0, G, Game.Board.Nb_Cities, 10);
+  int u = 0;
+  while(u<40){
+    printf("%d ", pred[u]);
+    u++;
+  }
+  printf("\n");
   //printMap();
   while(!game_over){
     printMap();
