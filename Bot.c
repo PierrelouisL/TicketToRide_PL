@@ -150,6 +150,7 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
     }
     printf("\n");
     for(int i = 0 ; i < (how_many_tracks-1) ; i++){
+      end = claimroute_or_pass(T, Game, i, pred, G, game_over);
       if((T[pred[i]][pred[i+1]].Track_color[0] == 0)&&(Game->which_player == 0)){
         /* Track_color[0] == 0 so it means that it's not a double track  */
         if(T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]){
@@ -225,4 +226,8 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
     }
   }
   return end;
+}
+
+t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* pred, int** G, int* game_over){
+  
 }
