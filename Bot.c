@@ -149,11 +149,11 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
       printf("%d ", pred[j]);
     }
     printf("\n");
-    for(int i = 0 ; i < how_many_tracks ; i++){
+    for(int i = 0 ; i < (how_many_tracks-1) ; i++){
       if((T[pred[i]][pred[i+1]].Track_color[0] == 0)&&(Game->which_player == 0)){
         /* Track_color[0] == 0 so it means that it's not a double track  */
         if(T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]){
-          if(G[pred[i]][pred[i+1]] != 0){
+          if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i]][pred[i+1]] < 99)){
             printf("claimroute : %d %d\n", pred[i], pred[i+1]);
             /* We claim the appropriate track */
             color = T[pred[i]][pred[i+1]].Track_color[1];
@@ -172,7 +172,7 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
         /* It is a double track so we need to check either if we have enough cards for each color */
         if((T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]])&&(Game->which_player == 0)){
           /* We claim the appropriate track */
-          if(G[pred[i]][pred[i+1]] != 0){
+          if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i]][pred[i+1]] < 99)){
             printf("claimroute1 : %d %d\n", pred[i], pred[i+1]);
             color = T[pred[i]][pred[i+1]].Track_color[1];
             end = claimRoute(pred[i],pred[i+1],color, 0);
@@ -188,7 +188,7 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
         }else if((T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[2]])&&(Game->which_player == 0)){
           /* We don't have enough cards of the first color so we check the other track color */
           /* We claim the appropriate track */
-          if(G[pred[i]][pred[i+1]] != 0){
+          if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i]][pred[i+1]] < 99)){
             printf("claimroute2 : %d %d\n", pred[i], pred[i+1]);
             color = T[pred[i]][pred[i+1]].Track_color[2];
             end = claimRoute(pred[i],pred[i+1],color, 0);
