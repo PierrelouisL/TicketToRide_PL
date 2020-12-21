@@ -13,17 +13,29 @@ Pierre-Louis Lagunegrand EISE3
 #include "Dijkstra.h"
 
 /* Returns the closest non visited city */
-int Minimal_len(int** G, int* been_here, int src, int N){
-  printf("On entre dans Minimal_len\n");
+int Minimal_len(int* been_here, int* D, int N){
+  //printf("On entre dans Minimal_len\n");
   int min = 99;
-  int indice_min = src;
+  int indice_min = 0;
+
+  /*printf("D:\n");
+  for(int j = 0; j<N; j++){
+    printf("%d ",D[j]);
+  }
+  printf("\n");
+  printf("been_here:\n");
+  for(int j = 0; j<N; j++){
+    printf("%d ",been_here[j]);
+  }
+  printf("\n"); */
   for (int i = 0; i<N; i++){
-    printf("i  = %d, min = %d\n", i, min);
-    if((been_here[i] == 0)&&(G[src][i]<min)){
-      min = G[src][i];
+    //printf("i  = %d, min = %d\n", i, min);
+    if((been_here[i] == 0)&&(D[i]<min)){
+      min = D[i];
       indice_min = i;
     }
   }
+  //printf("Indice_min = %d\n", indice_min);
   return indice_min;
 }
 
@@ -51,30 +63,55 @@ int** create_G_array(t_Tracksncities **T, t_Game game){
 }
 
 /* N = Nbcity Returns pred which the way to go to src to */
-int* Dijkstra(int src, int** G, int N, int dest){
+int* Dijkstra(int src, int** G, int N, int dest, int* how_many_tracks){
+  //printf("on entre\n");
   int* been_here = (int*) calloc(N, sizeof(int));
-  int D[100];
+  int D[100]; /* D[u] = dist between u and src */
+  int last_cities_before[N];
   int* last_cities = (int*) calloc(N, sizeof(int));
   //int len_src_i[N];
   int u = src; /* Actual City */
-
+  int cpt; /* temp cpt */
+  //printf("src = %d N =%d dest = %d\n",src, N, dest);
   for(int i=0;i<N;i++){
     /* 99 represents infinity */
     D[i] = 99;
     been_here[i] = 0;
   }
+  D[src] = 0;
   //len_src_i[src] = 0;
-  while(u != dest){
-    u = Minimal_len(G, been_here, u, N);
+  while((u != dest)&&(cpt<100)){
+    u = Minimal_len(been_here,D, N);
+    been_here[u] = 1;
     for(int v = 0; v<N; v++){
-      printf("Dans la boucle %d %d %d\n", v, u, dest);
+      //printf("Dans la boucle %d %d %d\n", v, u, dest);
       if((been_here[v] == 0)&&(G[u][v] < 99)&&(D[u]+G[u][v] < D[v])){
-        printf("condition vérifée\n");
+        //printf("condition vérifée: D[u]= %d / G[u][v]= %d/ u = %d v =%d\n", D[u],G[u][v],u,v);
         D[v] = D[u]+G[u][v];
-        last_cities[v] = u;
+        last_cities_before[v] = u;
       }
     }
-    been_here[u] = 1;
+    cpt++;
   }
-  return last_cities;
+  /*for(int i = 0; i<N; i++){
+    printf("%d: %d \n", i, D[i]);
+  }*/
+  cpt = 0;
+  //printf("\n");
+  /* Creating last_cities array because it wasn't exploitable before. */
+  while(u != src){
+    last_cities[cpt] = u;
+    //printf("last_cities_before = %d ", last_cities_before[u]);
+    u = last_cities_before[u];
+    cpt++;
+  }
+  //printf("\nCPT = %d\n",cpt);
+  *how_many_tracks = cpt;
+  /* cpt >= 100 if the loop is called infinite so we want to indicate it in the returned value */
+  if(cpt<100){
+    return last_cities;
+  }else{
+    return NULL;
+  }
+
 }

@@ -16,21 +16,23 @@ int main(void){
   t_return_code end;
   t_Tracksncities** T = Create_cities_array(Game);
   int** G = create_G_array(T, Game);
-  int* pred = Dijkstra(0, G, Game.Board.Nb_Cities, 10);
+  /*int how_many_cities;
+  int* pred = Dijkstra(2, G, Game.Board.Nb_Cities, 26, &how_many_cities);
   int u = 0;
-  while(u<40){
+  printf("pred : ");
+  while(u<15){
     printf("%d ", pred[u]);
     u++;
   }
-  printf("\n");
+  printf("\n");*/
   //printMap();
   while(!game_over){
-    printMap();
     if(Game.which_player){
-      end = Opponent_s_turn(&Game, &game_over,T);
+      printMap();
+      end = Opponent_s_turn(&Game, &game_over,T, G);
     }else{
       //end = Bot_s_turn(&Game, &game_over);
-      end = User_s_turn(&Game, &game_over, T);
+      end = Bot_s_turn(&Game, &game_over, T,G);
     }
   }
   if(end == WINNING_MOVE){
