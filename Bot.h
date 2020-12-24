@@ -15,8 +15,9 @@ t_return_code User_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T);
 t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* pred, int** G, int* game_over);
 
 /* track_nb = 1 or 0 depending if we are looking for which color of the double track // always at 0 if single track*/
-t_return_code claimroute_(t_Tracksncities** T, t_Game* Game, int* pred, int** G, int i, char track_nb);
+t_return_code claimroute_(t_Tracksncities** T, t_Game* Game, int* pred, int** G,int i, char track_nb, char loco_or_not);
 
 /* Show G array */
 void show_G_array(t_Game* game, int** G);
+
 #endif

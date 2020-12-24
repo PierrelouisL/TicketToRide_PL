@@ -196,9 +196,12 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
 }
 
 /* track_nb = 1 or 0 */
-t_return_code claimroute_(t_Tracksncities** T, t_Game* Game, int* pred, int** G,int i, char track_nb){
+t_return_code claimroute_(t_Tracksncities** T, t_Game* Game, int* pred, int** G,int i, char track_nb, char loco_or_not){
   t_return_code end;
   t_color color;
+
+/* TODO: do loco implementation! */
+
   if(track_nb){
     if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i]][pred[i+1]] < 99)){
       printf("claimroute2 : %d %d\n", pred[i], pred[i+1]);
@@ -234,22 +237,34 @@ t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* 
   t_return_code end;
   if((T[pred[i]][pred[i+1]].Track_color[0] == 0)&&(Game->which_player == 0)){
     /* Track_color[0] == 0 so it means that it's not a double track  */
-    if(T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]){
-      printf("Condition1 verifiee pour %d %d tc = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]);
-      end = claimroute_(T, Game, pred, G, i, 0);
+
+    /* If the track is longer than 4 we use Locomotives otherwise we don't */
+    if(T[pred[i]][pred[i+1]].length > 4){
+      if(T[pred[i]][pred[i+1]].length <= (Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]+Game->players[Game->Player_nb].cards_in_hand[MULTICOLOR])){
+        printf("Condition1 verifiee pour %d %d tc = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]);
+        end = claimroute_(T, Game, pred, G, i, 0, 1);
+      }
+    }else{
+      if(T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]){
+        printf("Condition1 verifiee pour %d %d tc = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]);
+        end = claimroute_(T, Game, pred, G, i, 0, 0);
+      }
     }
   }else{
+
+    /* TODO: do the same thing for double track!!! */
+
     /* It is a double track so we need to check either if we have enough cards for each color */
     if((T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]])&&(Game->which_player == 0)){
       /* We claim the appropriate track */
       printf("Condition2 verifiee pour %d %d tc = %d tc2= %d\n", pred[i], pred[i+1],
                                                       Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]],
                                                       Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[2]]);
-      end = claimroute_(T, Game, pred, G, i, 0);
+      end = claimroute_(T, Game, pred, G, i, 0, 0);
     }else if((T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[2]])&&(Game->which_player == 0)){
       /* We don't have enough cards of the first color so we check the other track color */
       /* We claim the appropriate track */
-      end = claimroute_(T, Game, pred, G, i, 1);
+      end = claimroute_(T, Game, pred, G, i, 1, 0);
       printf("Condition3 verifiee pour %d %d tc = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[2]]);
     }
   }
