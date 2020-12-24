@@ -5,4 +5,13 @@ Si on a des objs vers l'est il faut prendre Nashville Atlanta, St Louis Nashvill
 Faire des détours n'est pas forcément une mauvaise idée, ça cache la destination
 
 Si un des objectif est 0, 1 ou 2 il faut prendre la track 1-2 et 0-1/0-8 si obj = 0
-Si un des objectif est  
+Si un des objectif est 
+
+for (nb objectifs) {  // 3 puis 5 puis 7 et éventuellement 9
+	dijkstra(obj.city1,obj.city2)
+	for (how_many_tracks){
+		si route.long =< cartes[route.coul]{
+			claimroute(route);
+		}
+	}
+}

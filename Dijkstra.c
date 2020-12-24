@@ -107,6 +107,7 @@ int* Dijkstra(int src, int** G, int N, int dest, int* how_many_tracks){
   }
   //printf("\nCPT = %d\n",cpt);
   *how_many_tracks = cpt;
+  last_cities[cpt] = src;
   /* cpt >= 100 if the loop is called infinite so we want to indicate it in the returned value */
   if(cpt<100){
     return last_cities;

@@ -49,9 +49,11 @@ void Opponent_s_move(t_Game* Game, t_move opponent_move, t_Tracksncities** T, in
     case CLAIM_ROUTE:
       /* The opponent just claimed a route so we need to update our array */
       T[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2].occupied = 1;
+      T[opponent_move.claimRoute.city2][opponent_move.claimRoute.city1].occupied = 1;
       Game->players->available_wagons -= T[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2].length;
       Game->players->Nb_cards_in_hand -= T[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2].length;
       G[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2] = 99;
+      G[opponent_move.claimRoute.city2][opponent_move.claimRoute.city1] = 99;
       break;
     case DRAW_CARD:
       /* The opponent just picked a faceup card so we might use it later on our strat */

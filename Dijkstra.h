@@ -4,8 +4,8 @@
 #include "API/TicketToRideAPI.h"
 #include "Game.h"
 
-/*typedef enum {
-  NONE = 0,
+typedef enum {
+  NO_ESSENTIAL_TRACK = 0,
   VANCOUVER_SEATTLE,
   SEATTLE_PORTLAND,
   VANCOUVER_CALGARY,
@@ -13,8 +13,17 @@
   DULUTH_OMAHA,
   OMAHA_KANSASCITY,
   KANSASCITY_OKLAHOMACITY,
-
-}t_objs;*/
+  OKLAHOMACITY_LITTLEROCK,
+  HOUSTON_NEWORLEANS,
+  DALLAS_HOUSTON,
+  NASHVILLE_ATLANTA,
+  ATLANTA_CHARLESTON,
+  CHARLESTON_RALEIGH,
+  RALEIGH_WASHINGTON,
+  WASHINSTON_PITTSBURGH,
+  PITTSBURGH_NYC,
+  TORONTO_PITTSBURGH
+}t_objs;
 
 int* Dijkstra(int src, int** G, int N, int dest,int* how_many_tracks);
 

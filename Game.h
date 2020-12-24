@@ -19,6 +19,7 @@ typedef struct{
   int available_wagons;       /* How many available wagons the player has */
   int Nb_cards_in_hand;       /* How many cards the player have in his hand */
   int Nb_objectives;          /* The number of objectives the player has */
+  int objectives_done[20];    /* How many objectives the player has completed */
   int cards_in_hand[10];      /* PURPLE,WHITE,BLUE,YELLOW,ORANGE,BLACK,RED,GREEN,MULTICOLOR */
   t_objective objectives[20]; /* Stores every of the player's objectives */
 } t_Player;
