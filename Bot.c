@@ -199,35 +199,30 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
 t_return_code claimroute_(t_Tracksncities** T, t_Game* Game, int* pred, int** G,int i, char track_nb, char loco_or_not){
   t_return_code end;
   t_color color;
-
-/* TODO: do loco implementation! */
-
-  if(track_nb){
-    if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i]][pred[i+1]] < 99)){
-      printf("claimroute2 : %d %d\n", pred[i], pred[i+1]);
-      color = T[pred[i]][pred[i+1]].Track_color[2];
-      if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i+1]][pred[i]] != 0)){
-        end = claimRoute(pred[i],pred[i+1],color, 0);
-        G[pred[i]][pred[i+1]] = 0;
-        G[pred[i+1]][pred[i]] = 0;
-        Game->players[Game->Player_nb].available_wagons -= T[pred[i]][pred[i+1]].length;
-        Game->players[Game->Player_nb].cards_in_hand[color] -= T[pred[i]][pred[i+1]].length;
-        Game->which_player = 1;
-      }
-    }
+  int nb_loco,nb_tr;
+  if(loco_or_not){
+    /* We're using a loco so we need to check how much loco do we need and complete it in the claimroute */
+    /* Track length - nb of the appropriate track =  nbloco */
+    nb_loco = T[pred[i]][pred[i+1]].length - Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]];
   }else{
-    if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i]][pred[i+1]] < 99)){
-      printf("claimroute1 : %d %d\n", pred[i], pred[i+1]);
-      /* We claim the appropriate track */
-      color = T[pred[i]][pred[i+1]].Track_color[1];
-      if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i+1]][pred[i]] != 0)){
-        end = claimRoute(pred[i],pred[i+1],color, 0);
-        G[pred[i]][pred[i+1]] = 0;
-        G[pred[i+1]][pred[i]] = 0;
-        Game->players[Game->Player_nb].available_wagons -= T[pred[i]][pred[i+1]].length;
-        Game->players[Game->Player_nb].cards_in_hand[color] -= T[pred[i]][pred[i+1]].length;
-        Game->which_player = 1;
-      }
+    nb_loco=0;
+  }
+  if(track_nb){
+    nb_tr = 2;
+  }else{
+    nb_tr = 1;
+  }
+  if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i]][pred[i+1]] < 99)){
+    /* We claim the appropriate track */
+    color = T[pred[i]][pred[i+1]].Track_color[nb_tr];
+    printf("claimroute1 : %d %d %d\n", pred[i], pred[i+1],color);
+    if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i+1]][pred[i]] != 0)){
+      end = claimRoute(pred[i],pred[i+1],color, nb_loco);
+      G[pred[i]][pred[i+1]] = 0;
+      G[pred[i+1]][pred[i]] = 0;
+      Game->players[Game->Player_nb].available_wagons -= T[pred[i]][pred[i+1]].length;
+      Game->players[Game->Player_nb].cards_in_hand[color] -= T[pred[i]][pred[i+1]].length;
+      Game->which_player = 1;
     }
   }
   return end;
