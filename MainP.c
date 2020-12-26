@@ -29,10 +29,10 @@ int main(void){
   while(!game_over){
     if(Game.which_player){
       printMap();
-      end = Opponent_s_turn(&Game, &game_over,T, G);
+      end = Opponent_s_turn(&Game, &game_over, T, G);
     }else{
       //end = Bot_s_turn(&Game, &game_over);
-      end = Bot_s_turn(&Game, &game_over, T,G);
+      end = Bot_s_turn(&Game, &game_over, T, G);
     }
   }
   if(end == WINNING_MOVE){
@@ -42,6 +42,10 @@ int main(void){
     printf("loose!\n");
   }
   free(Game.Board.Tracks);
+  for(int i = 0; i<Game.Board.Nb_Cities; i++){
+    free(T[i]);
+  }
+  free(T);
   closeConnection();
   return 0;
 }

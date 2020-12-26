@@ -109,6 +109,7 @@ int* Dijkstra(int src, int** G, int N, int dest, int* how_many_tracks){
   *how_many_tracks = cpt;
   last_cities[cpt] = src;
   /* cpt >= 100 if the loop is called infinite so we want to indicate it in the returned value */
+  free(been_here);
   if(cpt<100){
     return last_cities;
   }else{
