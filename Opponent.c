@@ -39,7 +39,6 @@ t_return_code Opponent_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T,
     }
     Opponent_s_move(Game, opponent_move, T, G);
   }
-  printf("replay = %d\n", replay);
   Game->which_player = 0;
   return end;
 }

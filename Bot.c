@@ -123,8 +123,8 @@ t_return_code User_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T){
 t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int** G){
   t_return_code end;
   t_objective obj[3];
-  int object1[3] = {1,1,1};
-  int how_many_tracks = 0, obj_done = 0;
+  int object1[3] = {1,1,1}, object2[3] = {1,1,0};
+  int how_many_tracks = 0, obj_done = 0, all_obj_done = 1;
   int* pred;
   t_color card;
 
@@ -141,6 +141,7 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
     printf("Obj = %d %d\n", Game->players[Game->Player_nb].objectives[0].city1, Game->players[Game->Player_nb].objectives[0].city2);
     Game->which_player = 1;
   }else if((Game->players[Game->Player_nb].Nb_objectives != 0) && (Game->which_player == 0)){
+    /* We shouldnt go here if we have done every obj */
     for(int objective = 0 ; objective < Game->players[Game->Player_nb].Nb_objectives ; objective++){
       pred = Dijkstra(Game->players[Game->Player_nb].objectives[objective].city1, G, Game->Board.Nb_Cities, Game->players[Game->Player_nb].objectives[objective].city2, &how_many_tracks);
       //pred = Dijkstra(0, G, Game->Board.Nb_Cities, 19, &how_many_tracks);
@@ -160,15 +161,30 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
         printf("Obj done\n");
         Game->players[Game->Player_nb].objectives_done[objective] = 1;
       }
-      for(int i =0;i<6;i++){
-        printf("%d ",Game->players[Game->Player_nb].objectives_done[objective]);
+      /* We multiply 1 per each objdone so we get 1 after this loop only if every obj done is equal to one */
+      for(int i =0;i<Game->players[Game->Player_nb].Nb_objectives;i++){
+        printf("%d ",Game->players[Game->Player_nb].objectives_done[i]);
+        all_obj_done *= Game->players[Game->Player_nb].objectives_done[i];
       }
       printf("\n");
-      for(int i = 0 ; i < (how_many_tracks) ; i++){
-        end = claimroute_or_pass(T, Game, i, pred, G, game_over);
-        if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
-          *game_over = 1;
-          return end;
+      printf("all obj = %d \n",all_obj_done);
+      if(all_obj_done){
+        /* We pick an other set of objectives */
+        /*end = drawObjectives(obj);
+        end = chooseObjectives(object2);
+        for(int i = Game->players[Game->Player_nb].Nb_objectives; i < (Game->players[Game->Player_nb].Nb_objectives + 2); i++ ){
+          Game->players[Game->Player_nb].objectives[i] = obj[i - Game->players[Game->Player_nb].Nb_objectives];
+        }
+        printf("New objectives \n");
+        Game->players[Game->Player_nb].Nb_objectives += 2;
+        Game->which_player = 1;*/
+      }else{
+        for(int i = 0 ; i < (how_many_tracks) ; i++){
+          end = claimroute_or_pass(T, Game, i, pred, G, game_over);
+          if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
+            *game_over = 1;
+            return end;
+          }
         }
       }
     }

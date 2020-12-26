@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS= -Wall
+CFLAGS= -Wall -Ofast
 EXEC=MainP
 SRC=$(filter-out test_array.c, $(wildcard *.c))
 OBJ=$(SRC:.c=.o)
