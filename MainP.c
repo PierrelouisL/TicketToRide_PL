@@ -10,10 +10,10 @@
 
 
 int main(void){
-  connectToServer("li1417-56.members.linode.com", 5678, "BOT_PL");
+  connectToServer("li1417-56.members.linode.com", 1234, "BOT_PL");
   t_Game Game = start_game();
-  int game_over=0;
-  t_return_code end;
+  int game_over = 0;
+  t_return_code end = NORMAL_MOVE;
   t_Tracksncities** T = Create_cities_array(Game);
   int** G = create_G_array(T, Game);
   /*int how_many_cities;
@@ -42,6 +42,10 @@ int main(void){
     printf("loose!\n");
   }
   free(Game.Board.Tracks);
+  for(int i = 0; i<Game.Board.Nb_Cities; i++){
+    free(G[i]);
+  }
+  free(G);
   for(int i = 0; i<Game.Board.Nb_Cities; i++){
     free(T[i]);
   }

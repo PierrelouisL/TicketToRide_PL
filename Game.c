@@ -25,6 +25,9 @@ t_Game start_game(){
   Game.Player_nb = Game.which_player;
   printf("Player Number = %d NbTracks=%d NbCities=%d\n", Game.Player_nb, Game.Board.Nb_Tracks, Game.Board.Nb_Cities);
 
+  for(int i = 0 ; i < 20 ; i++){
+    Game.players[Game.Player_nb].objectives_done[i] = 0;
+  }
 
   for(int i=0;i<10;i++){
     Game.players[Game.Player_nb].cards_in_hand[i] = 0;

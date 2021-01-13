@@ -56,6 +56,9 @@ void Opponent_s_move(t_Game* Game, t_move opponent_move, t_Tracksncities** T, in
       break;
     case DRAW_CARD:
       /* The opponent just picked a faceup card so we might use it later on our strat */
+      for(int i = 0; i<5;i++){
+        Game->faceup[i] = opponent_move.drawCard.faceUp[i];
+      }
       Game->players->Nb_cards_in_hand++;
       break;
     case DRAW_BLIND_CARD:

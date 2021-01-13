@@ -71,7 +71,7 @@ int* Dijkstra(int src, int** G, int N, int dest, int* how_many_tracks){
   int* last_cities = (int*) calloc(N, sizeof(int));
   //int len_src_i[N];
   int u = src; /* Actual City */
-  int cpt; /* temp cpt */
+  int cpt = 0; /* temp cpt */
   //printf("src = %d N =%d dest = %d\n",src, N, dest);
   for(int i=0;i<N;i++){
     /* 99 represents infinity */
