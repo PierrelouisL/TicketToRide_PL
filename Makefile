@@ -3,7 +3,7 @@ CFLAGS= -Wall -Ofast
 EXEC=MainP
 SRC=$(filter-out test_array.c, $(wildcard *.c))
 OBJ=$(SRC:.c=.o)
-INC= TicketToRide.o ClientAPI.o
+INC= TicketToRideAPI.o ClientAPI.o
 
 all: $(EXEC)
 
