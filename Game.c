@@ -18,10 +18,12 @@ t_Game start_game(){
   t_color cards[4];
   char* gameName = (char*) malloc(15*sizeof(char));
   strcpy(gameName, "Partie PL");
-
+//TRAINING NICE_BOT timeout=100 start=0 map=USA
   waitForT2RGame("TRAINING NICE_BOT timeout=100 start=0 map=USA", gameName, &Game.Board.Nb_Cities, &Game.Board.Nb_Tracks);
   Game.Board.Tracks = (int*) malloc(5*Game.Board.Nb_Tracks*sizeof(int));
+
   Game.which_player = getMap(Game.Board.Tracks, Game.faceup, cards);
+  Game.which_player = 1-Game.which_player;
   Game.Player_nb = Game.which_player;
   printf("Player Number = %d NbTracks=%d NbCities=%d\n", Game.Player_nb, Game.Board.Nb_Tracks, Game.Board.Nb_Cities);
 
@@ -47,6 +49,7 @@ t_Game start_game(){
     Game.players[Game.Player_nb].objectives[i].city2 = 0;
     Game.players[Game.Player_nb].objectives[i].score = 0;
   }
+
   free(gameName);
   return Game;
 }

@@ -25,4 +25,9 @@ void show_G_array(t_Game* game, int** G);
 /* Claim new objectives as the name says */
 t_return_code claim_new_objs(t_Tracksncities** T, t_Game* Game, int** G);
 
+/* This function goal is to find the shortest track available who is linked to one track or to both
+  Track2 = 99 if we're looking to one point other if we look for the closest track linked to this track (Track1 - Track2)
+  returns an array [2]which contains array[0]=shortest city and array[1]=edge of the track used */
+int* find_shortest_track_linked(int track1, int track2, t_Tracksncities** T, t_Game* Game);
+
 #endif

@@ -49,20 +49,22 @@ void Opponent_s_move(t_Game* Game, t_move opponent_move, t_Tracksncities** T, in
       /* The opponent just claimed a route so we need to update our array */
       T[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2].occupied = 1;
       T[opponent_move.claimRoute.city2][opponent_move.claimRoute.city1].occupied = 1;
-      Game->players->available_wagons -= T[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2].length;
-      Game->players->Nb_cards_in_hand -= T[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2].length;
+      Game->players[1-Game->Player_nb].available_wagons -= T[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2].length;
+      Game->players[1-Game->Player_nb].Nb_cards_in_hand -= T[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2].length;
       G[opponent_move.claimRoute.city1][opponent_move.claimRoute.city2] = 99;
       G[opponent_move.claimRoute.city2][opponent_move.claimRoute.city1] = 99;
+      Game->players[1-Game->Player_nb].last_track[0] = opponent_move.claimRoute.city1;
+      Game->players[1-Game->Player_nb].last_track[1] = opponent_move.claimRoute.city2;
       break;
     case DRAW_CARD:
       /* The opponent just picked a faceup card so we might use it later on our strat */
       for(int i = 0; i<5;i++){
         Game->faceup[i] = opponent_move.drawCard.faceUp[i];
       }
-      Game->players->Nb_cards_in_hand++;
+      Game->players[1-Game->Player_nb].Nb_cards_in_hand++;
       break;
     case DRAW_BLIND_CARD:
-      Game->players->Nb_cards_in_hand++;
+      Game->players[1-Game->Player_nb].Nb_cards_in_hand++;
       break;
     case CHOOSE_OBJECTIVES:
       Game->players[1-Game->Player_nb].Nb_objectives += opponent_move.chooseObjectives.nbObjectives;
@@ -71,4 +73,5 @@ void Opponent_s_move(t_Game* Game, t_move opponent_move, t_Tracksncities** T, in
       /* Here the game just sends 3 objective cards to the opponent so nothing to get here */
       break;
   }
+  Game->which_player = 0;
 }

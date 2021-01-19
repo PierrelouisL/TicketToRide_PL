@@ -22,6 +22,7 @@ typedef struct{
   int objectives_done[20];    /* How many objectives the player has completed */
   int cards_in_hand[10];      /* PURPLE,WHITE,BLUE,YELLOW,ORANGE,BLACK,RED,GREEN,MULTICOLOR */
   t_objective objectives[20]; /* Stores every of the player's objectives */
+  int last_track[2];          /* The last track the opponent placed in order to block him */
 } t_Player;
 
 typedef struct{
