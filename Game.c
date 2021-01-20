@@ -21,7 +21,7 @@ t_Game start_game(char* tournament, char test){
   char* gameType = (char*) malloc(100*sizeof(char));
 //TRAINING NICE_BOT timeout=100 start=0 map=USA
   if(test){
-    strcpy(gameType, "TRAINING NICE_BOT timeout=100 start=0 map=USA seed=0xf21743");
+    strcpy(gameType, "TRAINING NICE_BOT timeout=100 start=0 map=USA ");
   }else{
     strcpy(gameType, "TRAINING ");
     strcat(gameType, tournament);

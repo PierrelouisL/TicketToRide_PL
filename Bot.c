@@ -510,7 +510,7 @@ t_return_code obj_done_claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int
     }
     /*printf("maxcol=%d\n", max_col);*/
 
-    for(int i = 0; i < Game->Board.Nb_Cities ; i++){
+    for(int i = 0; i < (Game->Board.Nb_Cities - 1) ; i++){
       color = T[i][i+1].Track_color[1];
       if(color ==  MULTICOLOR){
           color = max_col;

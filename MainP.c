@@ -16,9 +16,9 @@ int main(void){
   printf("Which server do u want to connect to? (1 for 1234 anything else for 5678) : ");
   scanf("%d", &serv);
   if(serv == 1){
-    connectToServer("li1417-56.members.linode.com", 1234, "BOT_PL");
+    connectToServer("li1417-56.members.linode.com", 1234, "BOT_PLLLL");
   }else{
-    connectToServer("li1417-56.members.linode.com", 5678, "BOT_PL");
+    connectToServer("li1417-56.members.linode.com", 5678, "BOT_PLLLL");
   }
   printf("If tournament write tournament Nb else write 00: ");
   int c;
