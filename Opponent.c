@@ -22,7 +22,7 @@ t_return_code Opponent_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T,
       *game_over = 1;
       return end;
     }
-    printf("getmove : %d opponent_move %d\n", replay, opponent_move.type);
+    //printf("getmove : %d opponent_move %d\n", replay, opponent_move.type);
     Opponent_s_move(Game, opponent_move, T, G);
   }
   Game->which_player = 0;

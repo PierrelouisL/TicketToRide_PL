@@ -6,21 +6,24 @@
 #include "Bot.h"
 #include "Game.h"
 #include "Dijkstra.h"
+#include <string.h>
 
 int take_1st_obj(t_Game* Game);
 
 
 int main(void){
+  /*extern int debug;
+  debug = 2;*/
   int serv, is_tournament;
   char* tournament = (char*) calloc(20, sizeof(char));
   printf("Which server do u want to connect to? (1 for 1234 anything else for 5678) : ");
   scanf("%d", &serv);
   if(serv == 1){
-    connectToServer("li1417-56.members.linode.com", 1234, "BOT_PLLLL");
+    connectToServer("li1417-56.members.linode.com", 1234, "BOT_PL");
   }else{
-    connectToServer("li1417-56.members.linode.com", 5678, "BOT_PLLLL");
+    connectToServer("li1417-56.members.linode.com", 5678, "BOT_PL");
   }
-  printf("If tournament write tournament Nb else write 00: ");
+  printf("If tournament write tournament Nb else write 00 for normal and 01 for duel: ");
   int c;
   while((c = getchar()) != '\n' && c != EOF); /* Empty buffer */
   gets(tournament);
@@ -30,6 +33,10 @@ int main(void){
       printf("Tournament mode %s\n", tournament);
       Game = start_game(tournament, 0);
       is_tournament = 1;
+    }else if((tournament[1] == '1')&&(tournament[0] == '0')){
+      printf("duel mode, waiting for opponent...\n");
+      Game = start_game(tournament, 2);
+      is_tournament = 0;
     }else{
       printf("normal mode\n");
       Game = start_game(tournament ,1);
@@ -48,7 +55,6 @@ int main(void){
       u++;
     }
     printf("\n");*/
-    //printMap();
     if(Game.which_player){
       end = take_1st_obj(&Game);
     }else{
@@ -104,5 +110,6 @@ int take_1st_obj(t_Game* Game){
   }
   Game->players[Game->Player_nb].Nb_objectives = 3;
   printf("Obj = %d %d\n", Game->players[Game->Player_nb].objectives[0].city1, Game->players[Game->Player_nb].objectives[0].city2);
+  Game->which_player = 1;
   return end;
 }

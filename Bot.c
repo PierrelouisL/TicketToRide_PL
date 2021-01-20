@@ -131,26 +131,26 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
       obj_done = 1;
       pred = Dijkstra(Game->players[Game->Player_nb].objectives[objective].city1, G, Game->Board.Nb_Cities, Game->players[Game->Player_nb].objectives[objective].city2, &how_many_tracks);
       //printf("Dijkstra says there is %d tracks to destination.\n", how_many_tracks);
-      for(int j=0;j <= how_many_tracks;j++){
+      /*for(int j=0;j <= how_many_tracks;j++){
         printf("%d ", pred[j]);
-      }
+      }*/
       for(int j=0; j<how_many_tracks;j++){
         if(T[pred[j]][pred[j+1]].occupied != 2){
           obj_done = 0;
         }
       }
-      printf("\n");
+      //printf("\n");
       if(obj_done){
         //printf("Obj done\n");
         Game->players[Game->Player_nb].objectives_done[objective] = 1;
       }
       /* We multiply 1 per each objdone so we get 1 after this loop only if every obj done is equal to one */
       for(int i =0;i<Game->players[Game->Player_nb].Nb_objectives;i++){
-        printf("%d ",Game->players[Game->Player_nb].objectives_done[i]);
+        //printf("%d ",Game->players[Game->Player_nb].objectives_done[i]);
         all_obj_done *= Game->players[Game->Player_nb].objectives_done[i];
       }
-      printf("\n");
-      printf("all obj = %d \n",all_obj_done);
+      //printf("\n");
+      //printf("all obj = %d \n",all_obj_done);
       /* We choose which color we NEED to claim tracks! */
       for(int j = 0; j < how_many_tracks; j++){
         if(T[pred[j]][pred[j+1]].occupied != 2){
@@ -169,7 +169,7 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
     }
 
     if(all_obj_done && !Game->which_player){
-      if(Game->players[Game->Player_nb].Nb_objectives > 5){ //TODO: CHANGER le ">" en "<" pour ACTIVER
+      if(Game->players[Game->Player_nb].Nb_objectives < 5){ //TODO: CHANGER le ">" en "<" pour ACTIVER
         /* We pick an other set of objectives but we don't want too much of them*/
         end = claim_new_objs(T, Game, G);
         if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
@@ -181,7 +181,7 @@ t_return_code Bot_s_turn(t_Game* Game, int* game_over, t_Tracksncities** T, int*
         /* 1. Store every track we can get */
         /* 2. Since we want to score points we're looking to have the longest rail so we look which track we can claim */
         /* 3. Claim it */
-        printf("Let's score!\n");
+        //printf("Let's score!\n");
         end = obj_done_claimroute_or_pass(T, Game, game_over);
         if((end == WINNING_MOVE) || (end == LOOSING_MOVE)){
           *game_over = 1;
@@ -282,7 +282,7 @@ t_return_code claim_new_objs(t_Tracksncities** T, t_Game* Game, int** G){
   for(int i = obj_nb; i < (obj_nb + obj_taken); i++ ){
     Game->players[Game->Player_nb].objectives[i] = obj[i - obj_nb];
   }
-  printf("New objectives \n");
+  //printf("New objectives \n");
   Game->players[Game->Player_nb].Nb_objectives += obj_taken;
   Game->which_player = 1;
   free(pred1);
@@ -316,7 +316,7 @@ t_return_code claimroute_(t_Tracksncities** T, t_Game* Game, int* pred, int** G,
   if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i]][pred[i+1]] < 99)){
     /* We claim the appropriate track */
     color = T[pred[i]][pred[i+1]].Track_color[nb_tr];
-    printf("claimroute1 : %d %d %d %d\n", pred[i], pred[i+1],color, nb_loco);
+    //printf("claimroute1 : %d %d %d %d\n", pred[i], pred[i+1],color, nb_loco);
     if((G[pred[i]][pred[i+1]] != 0)&&(G[pred[i+1]][pred[i]] != 0)){
       end = claimRoute(pred[i],pred[i+1],color, nb_loco);
       T[pred[i+1]][pred[i]].occupied = 2;
@@ -346,7 +346,7 @@ t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* 
         if((G[pred[i]][pred[i+1]] != 0)&&(Game->players[Game->Player_nb].cards_in_hand[j] >= len)){
           /* We enough cards of j color to claim the route */
           /* We'll need to check if this is an appropriate color to use (if we dont need that color to claim an other track) */
-          printf("We claim %d %d with %d color\n", pred[i], pred[i+1], j);
+          //printf("We claim %d %d with %d color\n", pred[i], pred[i+1], j);
           claimRoute(pred[i], pred[i+1], j, 0);
           T[pred[i]][pred[i+1]].occupied = 2;
           T[pred[i+1]][pred[i]].occupied = 2;
@@ -361,14 +361,14 @@ t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* 
       /* If the track is longer than 4 we use Locomotives otherwise we don't */
       if(T[pred[i]][pred[i+1]].length > 2){
         if(T[pred[i]][pred[i+1]].length <= (Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]+Game->players[Game->Player_nb].cards_in_hand[MULTICOLOR])){
-          printf("Condition1.1 verifiee pour %d %d tc = %d mult = %d nbt = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]],
+          /*printf("Condition1.1 verifiee pour %d %d tc = %d mult = %d nbt = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]],
                                                                                           Game->players[Game->Player_nb].cards_in_hand[MULTICOLOR],
-                                                                                        Game->players[Game->Player_nb].cards_in_hand[Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]]);
+                                                                                        Game->players[Game->Player_nb].cards_in_hand[Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]]);*/
           end = claimroute_(T, Game, pred, G, i, 0, 1);
         }
       }else{
         if(T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]){
-          printf("Condition1.2 verifiee pour %d %d tc = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]);
+          //printf("Condition1.2 verifiee pour %d %d tc = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]);
           end = claimroute_(T, Game, pred, G, i, 0, 0);
         }
       }
@@ -387,7 +387,7 @@ t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* 
         if((G[pred[i]][pred[i+1]] != 0)&&(Game->players[Game->Player_nb].cards_in_hand[j] >= len)&&(Game->which_player == 0)){
           /* We have enough cards of j color to claim the route */
           /* We'll need to check if this is an appropriate color to use (if we dont need that color to claim an other track) */
-          printf("We claim2 %d %d with %d color\n", pred[i], pred[i+1], j);
+          //printf("We claim2 %d %d with %d color\n", pred[i], pred[i+1], j);
           claimRoute(pred[i], pred[i+1], j, 0);
           T[pred[i]][pred[i+1]].occupied = 2;
           T[pred[i+1]][pred[i]].occupied = 2;
@@ -401,16 +401,16 @@ t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* 
     }else{
       if((T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]])&&(Game->which_player == 0)){
         /* We claim the appropriate track */
-        printf("Condition2 verifiee pour %d %d tc = %d tc2= %d  %d  %d\n", pred[i], pred[i+1],
+        /*printf("Condition2 verifiee pour %d %d tc = %d tc2= %d  %d  %d\n", pred[i], pred[i+1],
                                                         Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]],
                                                         Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[2]],
-                                                        T[pred[i]][pred[i+1]].Track_color[1], T[pred[i]][pred[i+1]].Track_color[2]);
+                                                        T[pred[i]][pred[i+1]].Track_color[1], T[pred[i]][pred[i+1]].Track_color[2]);*/
         end = claimroute_(T, Game, pred, G, i, 0, 0);
       }else if((T[pred[i]][pred[i+1]].length <= Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[2]])&&(Game->which_player == 0)){
         /* We don't have enough cards of the first color so we check the other track color */
         /* We claim the appropriate track */
         end = claimroute_(T, Game, pred, G, i, 1, 0);
-        printf("Condition3 verifiee pour %d %d tc = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[2]]);
+        //printf("Condition3 verifiee pour %d %d tc = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[2]]);
       }
     }
   }
@@ -500,7 +500,7 @@ t_return_code obj_done_claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int
   }
 
   if(!claim_or_not){
-    printf("Trying to claim random route bcs we couldnt block\n");
+    //printf("Trying to claim random route bcs we couldnt block\n");
     int longest = 0;
     for(int j = 0; j<= MULTICOLOR; j++){
       /* TODO: Watch which color is the smartest to use  */
@@ -538,7 +538,7 @@ t_return_code obj_done_claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int
       nb_loco = 0;
     }
     //if(nb_loco < Game->players[Game->Player_nb].cards_in_hand[MULTICOLOR]){
-      printf("claim_end : %d %d %d %d\n",block_track[0], block_track[1], color, nb_loco);  //Replace block_track by longest_track to get longest_track
+      //printf("claim_end : %d %d %d %d\n",block_track[0], block_track[1], color, nb_loco);  //Replace block_track by longest_track to get longest_track
       end = claimRoute(block_track[0], block_track[1], color, 0);
       T[block_track[0]][block_track[1]].occupied = 2;
       T[block_track[1]][block_track[0]].occupied = 2;
@@ -566,7 +566,7 @@ int* find_shortest_track_linked(int track1, int track2, t_Tracksncities** T, t_G
         if((T[track1][i].occupied == 0)&&(T[track1][i].length < Game->players[Game->Player_nb].cards_in_hand[T[track1][i].Track_color[1]])){
           ret[0] = i;
           min_len = T[track1][i].length;
-          printf("found min1 : %d %d", track1, i);
+          //printf("found min1 : %d %d", track1, i);
         }
       }
     }
@@ -583,7 +583,7 @@ int* find_shortest_track_linked(int track1, int track2, t_Tracksncities** T, t_G
             ret[0] = city;
             ret[1] = j;
             min_len = T[city][j].length;
-            printf("found min2 : %d %d", city, j);
+            //printf("found min2 : %d %d", city, j);
           }
         }
       }

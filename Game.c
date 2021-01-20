@@ -20,12 +20,14 @@ t_Game start_game(char* tournament, char test){
   strcpy(gameName, "Partie PL");
   char* gameType = (char*) malloc(100*sizeof(char));
 //TRAINING NICE_BOT timeout=100 start=0 map=USA
-  if(test){
-    strcpy(gameType, "TRAINING NICE_BOT timeout=100 start=0 map=USA ");
-  }else{
-    strcpy(gameType, "TRAINING ");
+  if(test == 1){
+    strcpy(gameType, "TRAINING NICE_BOT timeout=100 start=0 map=USA");
+  }else if(test == 0){
+    strcpy(gameType, "TOURNAMENT ");
     strcat(gameType, tournament);
     strcat(gameType, " timeout=100 start=0 map=USA");
+  }else{
+    strcpy(gameType, " ");
   }
   waitForT2RGame(gameType, gameName, &Game.Board.Nb_Cities, &Game.Board.Nb_Tracks);
   Game.Board.Tracks = (int*) malloc(5*Game.Board.Nb_Tracks*sizeof(int));
@@ -33,7 +35,7 @@ t_Game start_game(char* tournament, char test){
   Game.which_player = getMap(Game.Board.Tracks, Game.faceup, cards);
   Game.which_player = 1-Game.which_player;
   Game.Player_nb = Game.which_player;
-  printf("Player Number = %d NbTracks=%d NbCities=%d\n", Game.Player_nb, Game.Board.Nb_Tracks, Game.Board.Nb_Cities);
+  //printf("Player Number = %d NbTracks=%d NbCities=%d\n", Game.Player_nb, Game.Board.Nb_Tracks, Game.Board.Nb_Cities);
 
   for(int i = 0 ; i < 20 ; i++){
     Game.players[Game.Player_nb].objectives_done[i] = 0;
@@ -41,9 +43,9 @@ t_Game start_game(char* tournament, char test){
 
   for(int i=0;i<10;i++){
     Game.players[Game.Player_nb].cards_in_hand[i] = 0;
-    printf("%d ",Game.players[Game.Player_nb].cards_in_hand[i]);
+    //printf("%d ",Game.players[Game.Player_nb].cards_in_hand[i]);
   }
-  printf("\n");
+  //printf("\n");
   for(int i = 0 ; i<4 ; i++){
     Game.players[Game.Player_nb].cards_in_hand[cards[i]]++;
     /*
@@ -120,9 +122,9 @@ t_Tracksncities** Create_cities_array(t_Game game){
 void show_T_array(t_Game game, t_Tracksncities** T){
   printf("| ");
   for(int i = 0;i<game.Board.Nb_Cities;i++){
-    for(int j = 0;j<game.Board.Nb_Cities;j++){
+    /*for(int j = 0;j<game.Board.Nb_Cities;j++){
       printf("%d | ",T[i][j].length);
-    }
+    }*/
     printf("\n----------------------------------------------------------------------");
     printf("---------------------------------------------------------------------------\n| ");
   }
