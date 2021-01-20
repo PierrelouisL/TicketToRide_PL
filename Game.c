@@ -13,13 +13,21 @@ Pierre-Louis Lagunegrand EISE3
 #include "API/TicketToRideAPI.h"
 #include "Game.h"
 
-t_Game start_game(){
+t_Game start_game(char* tournament, char test){
   t_Game Game;
   t_color cards[4];
   char* gameName = (char*) malloc(15*sizeof(char));
   strcpy(gameName, "Partie PL");
+  char* gameType = (char*) malloc(100*sizeof(char));
 //TRAINING NICE_BOT timeout=100 start=0 map=USA
-  waitForT2RGame("TRAINING NICE_BOT timeout=100 start=0 map=USA", gameName, &Game.Board.Nb_Cities, &Game.Board.Nb_Tracks);
+  if(test){
+    strcpy(gameType, "TRAINING NICE_BOT timeout=100 start=0 map=USA seed=0xf21743");
+  }else{
+    strcpy(gameType, "TRAINING ");
+    strcat(gameType, tournament);
+    strcat(gameType, " timeout=100 start=0 map=USA");
+  }
+  waitForT2RGame(gameType, gameName, &Game.Board.Nb_Cities, &Game.Board.Nb_Tracks);
   Game.Board.Tracks = (int*) malloc(5*Game.Board.Nb_Tracks*sizeof(int));
 
   Game.which_player = getMap(Game.Board.Tracks, Game.faceup, cards);

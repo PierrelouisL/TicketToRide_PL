@@ -11,7 +11,8 @@ int take_1st_obj(t_Game* Game);
 
 
 int main(void){
-  int serv;
+  int serv, is_tournament;
+  char* tournament = (char*) calloc(20, sizeof(char));
   printf("Which server do u want to connect to? (1 for 1234 anything else for 5678) : ");
   scanf("%d", &serv);
   if(serv == 1){
@@ -19,51 +20,73 @@ int main(void){
   }else{
     connectToServer("li1417-56.members.linode.com", 5678, "BOT_PL");
   }
-  t_Game Game = start_game();
-  int game_over = 0;
-  t_return_code end = NORMAL_MOVE;
-  t_Tracksncities** T = Create_cities_array(Game);
-  int** G = create_G_array(T, Game);
-  /*int how_many_cities;
-  int* pred = Dijkstra(2, G, Game.Board.Nb_Cities, 26, &how_many_cities);
-  int u = 0;
-  printf("pred : ");
-  while(u<15){
-    printf("%d ", pred[u]);
-    u++;
-  }
-  printf("\n");*/
-  //printMap();
-  if(Game.which_player){
-    end = take_1st_obj(&Game);
-  }else{
-    end = Opponent_s_turn(&Game, &game_over, T, G);
-    end = take_1st_obj(&Game);
-  }
-  while(!game_over){
-    if(Game.which_player){
-      printMap();
-      end = Opponent_s_turn(&Game, &game_over, T, G);
+  printf("If tournament write tournament Nb else write 00: ");
+  int c;
+  while((c = getchar()) != '\n' && c != EOF); /* Empty buffer */
+  gets(tournament);
+  t_Game Game;
+  do{
+    if((tournament[0] != '0')&&(tournament[1] != '0')){
+      printf("Tournament mode %s\n", tournament);
+      Game = start_game(tournament, 0);
+      is_tournament = 1;
     }else{
-      //end = Bot_s_turn(&Game, &game_over);
-      end = Bot_s_turn(&Game, &game_over, T, G);
+      printf("normal mode\n");
+      Game = start_game(tournament ,1);
+      is_tournament = 0;
     }
-  }
-  if(end == WINNING_MOVE){
-    printf("win!\n");
-  }
-  if(end ==LOOSING_MOVE){
-    printf("loose!\n");
-  }
-  free(Game.Board.Tracks);
-  for(int i = 0; i<Game.Board.Nb_Cities; i++){
-    free(G[i]);
-  }
-  free(G);
-  for(int i = 0; i<Game.Board.Nb_Cities; i++){
-    free(T[i]);
-  }
-  free(T);
+    int game_over = 0;
+    t_return_code end = NORMAL_MOVE;
+    t_Tracksncities** T = Create_cities_array(Game);
+    int** G = create_G_array(T, Game);
+    /*int how_many_cities;
+    int* pred = Dijkstra(2, G, Game.Board.Nb_Cities, 26, &how_many_cities);
+    int u = 0;
+    printf("pred : ");
+    while(u<15){
+      printf("%d ", pred[u]);
+      u++;
+    }
+    printf("\n");*/
+    //printMap();
+    if(Game.which_player){
+      end = take_1st_obj(&Game);
+    }else{
+      end = Opponent_s_turn(&Game, &game_over, T, G);
+      end = take_1st_obj(&Game);
+    }
+    while(!game_over){
+      if(Game.which_player){
+        printMap();
+        end = Opponent_s_turn(&Game, &game_over, T, G);
+        if(end == LOOSING_MOVE){
+          printf("win!\n");
+        }
+        if(end ==WINNING_MOVE){
+          printf("loose!\n");
+        }
+      }else{
+        //end = Bot_s_turn(&Game, &game_over);
+        end = Bot_s_turn(&Game, &game_over, T, G);
+        if(end == WINNING_MOVE){
+          printf("win!\n");
+        }
+        if(end ==LOOSING_MOVE){
+          printf("loose!\n");
+        }
+      }
+    }
+    free(Game.Board.Tracks);
+    for(int i = 0; i<Game.Board.Nb_Cities; i++){
+      free(G[i]);
+    }
+    free(G);
+    for(int i = 0; i<Game.Board.Nb_Cities; i++){
+      free(T[i]);
+    }
+    free(T);
+  }while(is_tournament);
+
   closeConnection();
   return 0;
 }

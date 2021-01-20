@@ -34,7 +34,7 @@ typedef struct{
 } t_Game;
 
 /* This function Initialize the game */
-t_Game start_game();
+t_Game start_game(char* tournament, char test);
 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

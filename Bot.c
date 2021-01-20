@@ -359,7 +359,7 @@ t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* 
       }
     }else{
       /* If the track is longer than 4 we use Locomotives otherwise we don't */
-      if(T[pred[i]][pred[i+1]].length > 3){
+      if(T[pred[i]][pred[i+1]].length > 2){
         if(T[pred[i]][pred[i+1]].length <= (Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]]+Game->players[Game->Player_nb].cards_in_hand[MULTICOLOR])){
           printf("Condition1.1 verifiee pour %d %d tc = %d mult = %d nbt = %d\n", pred[i], pred[i+1], Game->players[Game->Player_nb].cards_in_hand[T[pred[i]][pred[i+1]].Track_color[1]],
                                                                                           Game->players[Game->Player_nb].cards_in_hand[MULTICOLOR],
@@ -385,7 +385,7 @@ t_return_code claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int i, int* 
       for(int j = 1; j < 9; j++){
         /* j represents the color of our card */
         if((G[pred[i]][pred[i+1]] != 0)&&(Game->players[Game->Player_nb].cards_in_hand[j] >= len)&&(Game->which_player == 0)){
-          /* We enough cards of j color to claim the route */
+          /* We have enough cards of j color to claim the route */
           /* We'll need to check if this is an appropriate color to use (if we dont need that color to claim an other track) */
           printf("We claim2 %d %d with %d color\n", pred[i], pred[i+1], j);
           claimRoute(pred[i], pred[i+1], j, 0);
@@ -508,7 +508,7 @@ t_return_code obj_done_claimroute_or_pass(t_Tracksncities** T, t_Game* Game, int
         max_col = j;
       }
     }
-    printf("maxcol=%d\n", max_col);
+    /*printf("maxcol=%d\n", max_col);*/
 
     for(int i = 0; i < Game->Board.Nb_Cities ; i++){
       color = T[i][i+1].Track_color[1];
