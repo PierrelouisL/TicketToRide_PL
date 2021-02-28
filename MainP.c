@@ -16,13 +16,9 @@ int main(void){
   debug = 2;*/
   int serv, is_tournament;
   char* tournament = (char*) calloc(20, sizeof(char));
-  printf("Which server do u want to connect to? (1 for 1234 anything else for 5678) : ");
-  scanf("%d", &serv);
-  if(serv == 1){
-    connectToServer("li1417-56.members.linode.com", 1234, "BOT_PL");
-  }else{
-    connectToServer("li1417-56.members.linode.com", 5678, "BOT_PL");
-  }
+  
+  connectToServer("localhost", 1234, "BOT_PL");
+  
   printf("If tournament write tournament Nb else write 00 for normal and 01 for duel: ");
   int c;
   while((c = getchar()) != '\n' && c != EOF); /* Empty buffer */
